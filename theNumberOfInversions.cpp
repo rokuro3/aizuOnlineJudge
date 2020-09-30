@@ -1,49 +1,47 @@
 #include <bits/stdc++.h>
 using namespace std;
+
+typedef long long ll;
 typedef struct bit{
-    vector<int> vec;
-    int n;
-    bit(int num) :vec(num+1,0){ n = num;}
-    void add(int i, int w){
+    vector<ll> vec;
+    ll n;
+    bit(ll num) :vec(num+1,0){ n = num;}
+    void add(ll i, ll w){
         if(i == 0) return;
-        for(int k = i; k<=n; k+=(k & -k)){
-            //LSBをとって、加算
+        for(ll k = i; k<=n; k+=(k & -k)){//LSBをとるようなループ
             vec[k] +=w;
         }
     }
-    int sum(int i){
-        int s = 0;
+    ll sum(ll i){
+        ll s = 0;
         if(i == 0) return s;
-        for(int k = i; k>0 ; k-=(k &-k)){
-        //LSBを取って減算
+        for(ll k = i; k>0 ; k-=(k &-k)){//LSBをとるようなループ
             s+=vec[k];
         }
         return s;
     }
 }BIT;
-
+//1-indexedで作成していることに注意
 
 int main(){
-    int n;
+    ll n;
     cin >> n;
-    BIT bit(n);
-    vector<int> a(n);
-    for(int i=0; i<n; i++){
+    BIT bit(n+1);
+    vector<ll> a(n),b(n);
+    vector<pair<ll, ll>> ap;
+    for(ll i=0; i<n; i++){
         cin >> a[i];
+        ap.push_back(make_pair(a[i],i));
     }
-    int ans = 0;
-    for(int i=0; i<n; i++){
-        ans += i - bit.sum(a[i]);
-        bit.add(a[i], 1);
+    sort(ap.begin(), ap.end());//apをソート
+    for(ll i=0; i<n; i++)
+        b[ap[i].second] = i + 1;
+        //a[i].secondにはソート前の要素を指し示す添え字がはいっている
+    ll ans = 0;
+    for(ll i=0; i<n; i++){
+        ans += i - bit.sum(b[i]);
+        bit.add(b[i], 1);
     }
     cout << ans << endl;
 }
 
-//これだと、作成する配列の数が要素の最大値+1になってしまう。
-//そのため、受け取るnumの要素数のBITを作る。
-// 受け取った数をソートして、ソートしたあとのindexで考える。indexは1刻みの昇順のリストで、
-//a[受け取った数字のindex] = ソートした配列のindex としてあげるとBITで作る配列の数を減らせる。
-//2の方に実装例を載せた。
-
-https://kira000.hatenadiary.jp/entry/2019/02/23/053917
-https://coonevo.hatenablog.com/entry/2020/03/19/174849

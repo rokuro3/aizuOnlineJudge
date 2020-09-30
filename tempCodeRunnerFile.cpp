@@ -1,2 +1,1 @@
-       cout << A[i] << endl;
-        continue;
+int

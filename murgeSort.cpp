@@ -15,10 +15,10 @@ void merge(vector<int> &A, int left, int mid, int right){
     R[n2] = 1000000000;
     int i=0, j=0;
     for(int k = left ; k < right ; k++){
-        cnt++;
         if(L[i] <= R[j]){
             A[k] = L[i];
             i++;
+            cnt++;
         }
         else{
             A[k] = R[j];
